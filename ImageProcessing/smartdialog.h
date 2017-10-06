@@ -4,14 +4,22 @@
 #include <QAction>
 #include <QMenu>
 #include <QInputDialog>
+#include <QDialog>
+#include <QFormLayout>
+#include <QDialogButtonBox>
+#include <QDebug>
+#include <QLabel>
+#include <QString>
 
 class SmartDialog : public QAction
 {
 public:
-    SmartDialog(QString name, bool* ok, QMenu * menu=nullptr);
-    double getValue();
+    SmartDialog(QString name,bool* ok, short numberOfLabels =1 ,QWidget* widget= nullptr);
+    QMap<QString,double> getValues();
+    double getFirstValue();
 private:
-    double value;
+    QMap<QString, QLineEdit*> inputValues;
+    QDialog* dialog;
 };
 
 #endif // SMARTDIALOG_H

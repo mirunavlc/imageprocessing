@@ -161,7 +161,7 @@ void MainWindow::on_actionLamba_triggered()
 {
     bool ok;
     SmartDialog lambda("Lambda", &ok);
-    transientData->insert("Lambda",lambda.getValue());
+    //transientData->insert("Lambda",lambda.getValue());
     //Example of usage CTRL+/ to uncomment
     //    if (ok)
     //    {
@@ -306,13 +306,22 @@ void MainWindow::on_actionLaunch_magnifier_triggered()
 */
 void MainWindow::on_actionGama_triggered()
 {
-    bool ok=false;
-    SmartDialog gama("Gama",&ok);
-    transientData->insert("Gama",gama.getValue());
-    //Example of usage CTRL+/ to uncomment
-
-    //    if(ok){
-    //        ui->label->setText(QString::number(transientData->value("Gama")));
-    //    }
+    bool ok;
+    SmartDialog smart("Gama",&ok,4);
+    if(ok)
+    {
+        QMap<QString, double>intermidiateValues= smart.getValues();
+        QMap<QString, double>::iterator i;
+        QString key;
+        for (i = intermidiateValues.begin(); i != intermidiateValues.end(); ++i)
+        {
+            key=i.key();
+            (*transientData)[i.key()]= i.value();
+        }
+        //Example of usage CTRL+/ to uncomment
+        //Make sure you enter a double value!
+        //ui->label->setText(QString::number((*transientData)[key]));
+    }
 }
+
 

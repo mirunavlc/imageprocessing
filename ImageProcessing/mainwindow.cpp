@@ -203,6 +203,7 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *event)
             if(!isSamePoint(previousPress,mouseEvent->pos()))
             {
                 qDebug()<< "mouse draged";
+                cropImageToModifiedImage(previousPress,mouseEvent->pos());
             }
         }
     }
@@ -229,6 +230,27 @@ bool MainWindow::isSamePoint(QPoint firstPoint, QPoint secondPoint)
 {
     return (firstPoint.x() == secondPoint.x()) && (firstPoint.y() == secondPoint.y());
 }
+
+void MainWindow::cropImageToModifiedImage(QPoint initialPoint, QPoint lastPoint)
+{
+
+    QPoint startPoint=initialPoint;;
+    QPoint finishPoint= lastPoint;;
+    if(initialPoint.y()>lastPoint.y())
+    {
+        startPoint=lastPoint;
+        finishPoint=initialPoint;
+    }
+    if(startPoint.x()>finishPoint.x())
+    {
+        qSwap(startPoint.rx(),finishPoint.rx());
+    }
+    QRect rect(startPoint, finishPoint);
+    QPixmap original= QPixmap::fromImage(*initialImage);
+    QPixmap cropped = original.copy(rect);
+    ui->label_2->setPixmap(cropped);
+}
+
 
 /*
     The method zooms over a 9x9 area that surrounds the given coordinate (x,y).

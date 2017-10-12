@@ -48,6 +48,7 @@ private:
     bool isMousedPressedOnModifiedImage(QObject *obj, QEvent *event);
     bool isMouseReleasedOnInitialImage(QObject *obj, QEvent *event);
     bool isSamePoint(QPoint firstPoint, QPoint secondPoint);
+    void cropImageToModifiedImage(QPoint initialPoint,QPoint lastPoint);
     void plotGreyPixels(int y, QImage* image) const;
 
 private:

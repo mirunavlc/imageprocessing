@@ -181,9 +181,10 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *event)
         if(isMousedPressedOnInitialImage(obj, event)||isMousedPressedOnModifiedImage(obj,event))
         {
             QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
+            previousPress= mouseEvent->pos();
             int mouseX = mouseEvent->pos().x();
             int mouseY = mouseEvent->pos().y();
-            qDebug() << QString("Mouse move (%1,%2)").arg(mouseX).arg(mouseY);
+            //qDebug() << QString("Mouse move (%1,%2)").arg(mouseX).arg(mouseY);
 
             if(isMousedPressedOnInitialImage(obj, event))
             {
@@ -196,7 +197,16 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *event)
             plotGreyPixels(mouseY,modifiedImage);
             return true;
         }
+        if(isMouseReleasedOnInitialImage(obj,event))
+        {
+            QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
+            if(!isSamePoint(previousPress,mouseEvent->pos()))
+            {
+                qDebug()<< "mouse draged";
+            }
+        }
     }
+
     return false;
 }
 
@@ -208,6 +218,16 @@ bool MainWindow::isMousedPressedOnInitialImage(QObject *obj, QEvent *event)
 bool MainWindow::isMousedPressedOnModifiedImage(QObject *obj, QEvent *event)
 {
     return  qobject_cast<QLabel*>(obj) == ui->label_2 && event->type() == QEvent::MouseButtonPress;
+}
+
+bool MainWindow::isMouseReleasedOnInitialImage(QObject *obj, QEvent *event)
+{
+    return  (qobject_cast<QLabel*>(obj) == ui->label && event->type() == QEvent::MouseButtonRelease);
+}
+
+bool MainWindow::isSamePoint(QPoint firstPoint, QPoint secondPoint)
+{
+    return (firstPoint.x() == secondPoint.x()) && (firstPoint.y() == secondPoint.y());
 }
 
 /*

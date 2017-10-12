@@ -46,9 +46,12 @@ private:
     void launchMagnifierDialog(int x, int y, QImage* image);
     bool isMousedPressedOnInitialImage(QObject *obj, QEvent *event);
     bool isMousedPressedOnModifiedImage(QObject *obj, QEvent *event);
+    bool isMouseReleasedOnInitialImage(QObject *obj, QEvent *event);
+    bool isSamePoint(QPoint firstPoint, QPoint secondPoint);
     void plotGreyPixels(int y, QImage* image) const;
 
 private:
+    QPoint previousPress;
     QMap<QString,double>* transientData;
     QImage* initialImage;
     QString initialImagePath;

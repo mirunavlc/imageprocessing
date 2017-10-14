@@ -79,6 +79,7 @@ void MainWindow::on_actionSave_as_triggered()
 
 /*
     The method transforms the given image into a greyscale image.
+    Checks if the image/pixmap is stored in a RGB format or in a monochrome 8-bit format and uses specific filters.
  */
 void MainWindow::toGreyScale(QImage* image)
 {
@@ -86,12 +87,20 @@ void MainWindow::toGreyScale(QImage* image)
     {
         return;
     }
+    int count=image->bitPlaneCount();
     for (int i = 0;  i < image->width();  i++)
     {
         for (int j = 0; j < image->height(); j++)
         {
             int gray = qGray(image->pixel(i,j));
-            image->setPixel(i,j, QColor(gray, gray, gray).rgb());
+            if(count>8)
+            {
+                image->setPixel(i,j, QColor(gray, gray, gray).rgb());
+            }
+            else
+            {
+                image->setPixel(i,j,gray);
+            }
         }
     }
 }
@@ -266,6 +275,7 @@ void MainWindow::launchMagnifierDialog(int x, int y, QImage* image)
 
 /*
     The method creates a reverted image to the initialImage and puts it in the modifiedImage.
+    Checks if the image/pixmap is stored in a RGB format or in a monochrome 8-bit format and uses specific filters.
  */
 void MainWindow::on_actionRevert_colors_triggered()
 {
@@ -273,12 +283,22 @@ void MainWindow::on_actionRevert_colors_triggered()
     {
         return;
     }
+    int count=initialImage->bitPlaneCount();
     for (int i = 0;  i < initialImage->width();  i++)
     {
         for (int j = 0; j < initialImage->height(); j++)
         {
-            QColor color = initialImage->pixelColor(i, j);
-            modifiedImage->setPixel(i,j,qRgb(255-color.red(),255-color.green(),255-color.blue()));
+            QColor color = initialImage->pixel(i, j);
+
+            if(count>8)
+            {
+                modifiedImage->setPixel(i,j,qRgb(255-color.red(),255-color.green(),255-color.blue()));
+            }
+            else
+            {
+                modifiedImage->setPixel(i,j,(255-qGray(color.rgb())));
+            }
+
         }
     }
     updateImages(false);
